@@ -1,0 +1,4 @@
+docx2txt==0.9
+Pillow==9.0.0
+PyPDF2==1.26.0
+streamlit==1.0.0
