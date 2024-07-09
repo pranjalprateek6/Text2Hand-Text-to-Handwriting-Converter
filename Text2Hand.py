@@ -1,5 +1,5 @@
 import streamlit as st
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 import os
 import io
 import docx2txt  # Required for reading Word documents
@@ -16,22 +16,15 @@ def text_to_image(content, horizontal_size, vertical_size, start_with_gap=True):
     else:
         gap, ht = 0, 0  # Start from absolute top-left
     
-    # Attempt to load Arial font, with fallback to default font
-    try:
-        font = ImageFont.truetype("arial.ttf", 20)
-    except OSError:
-        font = ImageFont.load_default()  # Fallback to default font
-    
     words = content.split()
     line_gap = gap
     
     for word in words:
         # Draw the word on the background image
-        draw.text((line_gap, ht), word, font=font, fill="black")
+        draw.text((line_gap, ht), word, fill="black")
         
         # Update gap for the next word
-        word_width, word_height = draw.textsize(word, font=font)
-        line_gap += word_width + 10  # Add spacing between words
+        line_gap += horizontal_size + 10  # Add spacing between words
     
     return BG
 
