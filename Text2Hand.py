@@ -26,7 +26,8 @@ def text_to_image(content, horizontal_size, vertical_size, start_with_gap=True):
         # Update gap for the next word
         line_gap += horizontal_size + 10  # Add spacing between words
     
-    st.image(BG, caption='Background Image', use_column_width=True)  # Debugging: Display the background image
+    # Debugging: Display background image to check drawing
+    st.image(BG, caption='Background Image', use_column_width=True)
     
     return BG
 
@@ -114,6 +115,8 @@ if st.button("Generate Handwritten Text"):
             content = read_pdf(uploaded_file)
         elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
             content = read_docx(uploaded_file)
+        
+        st.write("Content:", content)  # Debugging: Output content to check
         
         image = text_to_image(content, horizontal_size, vertical_size, start_with_gap)
         st.image(image, caption='Generated Image', use_column_width=True)
