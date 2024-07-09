@@ -11,13 +11,17 @@ def text_to_image(content, horizontal_size, vertical_size, start_with_gap):
     BG = Image.open("myfont/bg.png").convert("RGBA")
     sheet_width, sheet_height = BG.size
     draw = ImageDraw.Draw(BG)
-
+    
     if start_with_gap:
         gap, ht = 100, 200  # Initial position with larger padding
     else:
         gap, ht = 0, 0  # Start from absolute top-left
-
-    font = ImageFont.truetype("arial.ttf", 20)
+    
+    # Attempt to load Arial font, with fallback to default font
+    try:
+        font = ImageFont.truetype("arial.ttf", 20)
+    except OSError:
+        font = ImageFont.load_default()  # Fallback to default font
     
     lines = content.splitlines()
     for line in lines:
@@ -25,7 +29,8 @@ def text_to_image(content, horizontal_size, vertical_size, start_with_gap):
         
         words = line.split()
         for word in words:
-            word_width, _ = draw.textsize(word, font=font)
+            # Calculate text size
+            word_width, word_height = draw.textsize(word, font=font)
             
             if line_gap + word_width >= sheet_width:
                 ht += vertical_size  # Move to the next line
@@ -56,6 +61,7 @@ def text_to_image(content, horizontal_size, vertical_size, start_with_gap):
         ht += vertical_size
 
     return BG
+
 
 # Function to read text from a Word document
 def read_docx(file):
