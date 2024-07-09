@@ -11,12 +11,12 @@ def text_to_image(content, horizontal_size, vertical_size, start_with_gap):
     BG = Image.open("myfont/bg.png").convert("RGBA")
     sheet_width, sheet_height = BG.size
     draw = ImageDraw.Draw(BG)
-
+    
     if start_with_gap:
         gap, ht = 100, 200  # Initial position with larger padding
     else:
         gap, ht = 0, 0  # Start from absolute top-left
-
+    
     lines = content.splitlines()
     for line in lines:
         line_gap = gap  # Start each line with the current gap
