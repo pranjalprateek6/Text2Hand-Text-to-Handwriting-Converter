@@ -1,4 +1,0 @@
-Pillow
-PyPDF2
-streamlit
-docx2txt
