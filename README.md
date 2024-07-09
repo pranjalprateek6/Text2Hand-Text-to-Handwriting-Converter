@@ -1,6 +1,7 @@
-# Text2Hand
+# Text2Hand - A Text to Handwriting Converter 
 
-Text2Hand is a Streamlit web application that converts typed text, Word documents, or PDFs into beautiful handwritten images. It's perfect for students looking to enhance assignments or anyone who enjoys the charm of handwritten notes without the manual effort.
+Text2Hand is a Streamlit web application that converts typed text, Word documents, or PDFs into beautiful handwritten images. It's perfect for students looking to enhance assignments or anyone who enjoys the charm of handwritten notes without manual effort.
+
 
 ![image](https://github.com/pranjalprateek6/Text2Hand-Text-to-Handwritting-Converter/assets/88288212/2582038e-f7ef-45c8-a5d4-5025a6e8456c)
 
