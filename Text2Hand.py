@@ -1,5 +1,5 @@
 import streamlit as st
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 import os
 import io
 import docx2txt  # Required for reading Word documents
@@ -19,17 +19,12 @@ def text_to_image(content, horizontal_size, vertical_size, start_with_gap=True):
     words = content.split()
     line_gap = gap
     
-    # Use a default font (adjust as necessary)
-    font = ImageFont.load_default()
-    
     for word in words:
-        # Calculate text size
-        word_width, word_height = draw.textsize(word, font=font)
-        
         # Draw the word on the image
-        draw.text((line_gap, ht), word, fill="black", font=font)
+        draw.text((line_gap, ht), word, fill="black")
         
         # Update gap for the next word
+        word_width, word_height = draw.textsize(word)  # Calculate text size
         line_gap += word_width + 10  # Add spacing between words
     
     return image
