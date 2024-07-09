@@ -1,35 +1,59 @@
 import streamlit as st
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 import os
 import io
+import base64
 import docx2txt  # Required for reading Word documents
 from PyPDF2 import PdfReader  # Import PdfReader from PyPDF2
 
 # Function to process the text content and generate image
-def text_to_image(content, horizontal_size, vertical_size, start_with_gap=True):
-    # Create a new image with white background
-    image = Image.new("RGB", (horizontal_size, vertical_size), "white")
-    draw = ImageDraw.Draw(image)
-    
+def text_to_image(content, horizontal_size, vertical_size, start_with_gap):
+    BG = Image.open("myfont/bg.png").convert("RGBA")
+    sheet_width, sheet_height = BG.size
+    draw = ImageDraw.Draw(BG)
+
     if start_with_gap:
-        gap, ht = 10, 10  # Initial position with padding
+        gap, ht = 100, 200  # Initial position with larger padding
     else:
         gap, ht = 0, 0  # Start from absolute top-left
     
-    words = content.split()
-    line_gap = gap
-    
-    for word in words:
-        # Draw the word on the image
-        draw.text((line_gap, ht), word, fill="black")
+    lines = content.splitlines()
+    for line in lines:
+        line_gap = gap  # Start each line with the current gap
         
-        # Get the size of the drawn text
-        word_width, word_height = draw.textsize(word)
+        words = line.split()
+        for word in words:
+            word_width, _ = draw.textsize(word)
+            
+            if line_gap + word_width >= sheet_width:
+                ht += vertical_size  # Move to the next line
+                line_gap = gap  # Reset gap for the new line
+            
+            for i in word.replace("\n", ""):
+                char_image_path = f"myfont/{ord(i)}.png"
+                if os.path.exists(char_image_path):
+                    cases = Image.open(char_image_path).convert("RGBA")
+                    
+                    # Resize character image based on horizontal and vertical sizes
+                    cases = cases.resize((min(horizontal_size, 100), vertical_size))
+                    
+                    # Draw character onto the background image
+                    BG.paste(cases, (line_gap, ht), cases)
+                    
+                    # Update gap for the next character
+                    line_gap += min(horizontal_size, 100)
+                    
+                else:
+                    # Optionally, handle missing character images
+                    print(f"Image for character {i} not found, skipping...")
+
+            # Add space after each word
+            line_gap += min(horizontal_size, 100)
         
-        # Update gap for the next word
-        line_gap += word_width + 10  # Add spacing between words
-    
-    return image
+        # Move to the next line
+        ht += vertical_size
+
+    return BG
 
 # Function to read text from a Word document
 def read_docx(file):
