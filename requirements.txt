@@ -1,4 +1,4 @@
 Pillow
-PyPDF2==1.26.0
-streamlit==1.0.0
+PyPDF2
+streamlit
 docx2txt
