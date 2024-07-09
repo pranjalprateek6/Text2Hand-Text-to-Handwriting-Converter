@@ -1,5 +1,5 @@
 import streamlit as st
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 import os
 import io
 import docx2txt  # Required for reading Word documents
@@ -7,29 +7,32 @@ from PyPDF2 import PdfReader  # Import PdfReader from PyPDF2
 
 # Function to process the text content and generate image
 def text_to_image(content, horizontal_size, vertical_size, start_with_gap=True):
-    BG = Image.open("myfont/bg.png").convert("RGBA")
-    sheet_width, sheet_height = BG.size
-    draw = ImageDraw.Draw(BG)
+    # Create a new image with white background
+    image = Image.new("RGB", (horizontal_size, vertical_size), "white")
+    draw = ImageDraw.Draw(image)
     
     if start_with_gap:
-        gap, ht = 100, 200  # Initial position with larger padding
+        gap, ht = 10, 10  # Initial position with padding
     else:
         gap, ht = 0, 0  # Start from absolute top-left
     
     words = content.split()
     line_gap = gap
     
+    # Use a default font (adjust as necessary)
+    font = ImageFont.load_default()
+    
     for word in words:
-        # Draw the word on the background image
-        draw.text((line_gap, ht), word, fill="black")
+        # Calculate text size
+        word_width, word_height = draw.textsize(word, font=font)
+        
+        # Draw the word on the image
+        draw.text((line_gap, ht), word, fill="black", font=font)
         
         # Update gap for the next word
-        line_gap += horizontal_size + 10  # Add spacing between words
+        line_gap += word_width + 10  # Add spacing between words
     
-    # Debugging: Display background image to check drawing
-    st.image(BG, caption='Background Image', use_column_width=True)
-    
-    return BG
+    return image
 
 # Function to read text from a Word document
 def read_docx(file):
@@ -115,8 +118,6 @@ if st.button("Generate Handwritten Text"):
             content = read_pdf(uploaded_file)
         elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
             content = read_docx(uploaded_file)
-        
-        st.write("Content:", content)  # Debugging: Output content to check
         
         image = text_to_image(content, horizontal_size, vertical_size, start_with_gap)
         st.image(image, caption='Generated Image', use_column_width=True)
