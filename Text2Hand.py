@@ -17,7 +17,8 @@ def text_to_image(content, horizontal_size, vertical_size, start_with_gap):
     else:
         gap, ht = 0, 0  # Start from absolute top-left
     
-    font = ImageFont.load_default()  # Use default font for textsize measurement
+    # Use default font for textsize measurement
+    font = ImageFont.load_default()  
     
     lines = content.splitlines()
     for line in lines:
@@ -25,6 +26,7 @@ def text_to_image(content, horizontal_size, vertical_size, start_with_gap):
         
         words = line.split()
         for word in words:
+            # Calculate text size
             word_width, word_height = draw.textsize(word, font=font)
             
             if line_gap + word_width >= sheet_width:
@@ -56,6 +58,7 @@ def text_to_image(content, horizontal_size, vertical_size, start_with_gap):
         ht += vertical_size
 
     return BG
+
 
 
 # Function to read text from a Word document
