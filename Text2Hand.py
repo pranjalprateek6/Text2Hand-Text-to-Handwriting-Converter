@@ -17,15 +17,13 @@ def text_to_image(content, horizontal_size, vertical_size, start_with_gap):
     else:
         gap, ht = 0, 0  # Start from absolute top-left
 
-    font = ImageFont.truetype("arial.ttf", 20)
-    
     lines = content.splitlines()
     for line in lines:
         line_gap = gap  # Start each line with the current gap
         
         words = line.split()
         for word in words:
-            word_width, _ = draw.textsize(word, font=font)
+            word_width, _ = draw.textsize(word)
             
             if line_gap + word_width >= sheet_width:
                 ht += vertical_size  # Move to the next line
