@@ -64,6 +64,7 @@ def text_to_image(content, horizontal_size, vertical_size, start_with_gap):
 
 
 
+
 # Function to read text from a Word document
 def read_docx(file):
     text = docx2txt.process(file)
