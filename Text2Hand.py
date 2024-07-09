@@ -23,8 +23,10 @@ def text_to_image(content, horizontal_size, vertical_size, start_with_gap=True):
         # Draw the word on the image
         draw.text((line_gap, ht), word, fill="black")
         
+        # Get the size of the drawn text
+        word_width, word_height = draw.textsize(word)
+        
         # Update gap for the next word
-        word_width, word_height = draw.textsize(word)  # Calculate text size
         line_gap += word_width + 10  # Add spacing between words
     
     return image
