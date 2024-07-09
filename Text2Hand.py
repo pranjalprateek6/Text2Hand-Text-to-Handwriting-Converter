@@ -22,28 +22,17 @@ def text_to_image(content, horizontal_size, vertical_size, start_with_gap=True):
     except OSError:
         font = ImageFont.load_default()  # Fallback to default font
     
-    lines = content.splitlines()
-    for line in lines:
-        line_gap = gap  # Start each line with the current gap
+    words = content.split()
+    line_gap = gap
+    
+    for word in words:
+        # Draw the word on the background image
+        draw.text((line_gap, ht), word, font=font, fill="black")
         
-        words = line.split()
-        for word in words:
-            # Calculate text size
-            word_width, word_height = draw.textsize(word, font=font)
-            
-            if line_gap + word_width >= sheet_width:
-                ht += vertical_size  # Move to the next line
-                line_gap = gap  # Reset gap for the new line
-            
-            # Draw the word on the background image
-            draw.text((line_gap, ht), word, font=font, fill="black")
-            
-            # Update gap for the next word
-            line_gap += word_width + 10  # Add spacing between words
-        
-        # Move to the next line
-        ht += vertical_size
-
+        # Update gap for the next word
+        word_width, word_height = draw.textsize(word, font=font)
+        line_gap += word_width + 10  # Add spacing between words
+    
     return BG
 
 # Function to read text from a Word document
