@@ -26,6 +26,8 @@ def text_to_image(content, horizontal_size, vertical_size, start_with_gap=True):
         # Update gap for the next word
         line_gap += horizontal_size + 10  # Add spacing between words
     
+    st.image(BG, caption='Background Image', use_column_width=True)  # Debugging: Display the background image
+    
     return BG
 
 # Function to read text from a Word document
